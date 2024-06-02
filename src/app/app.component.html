@@ -1,43 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Registration Form</title>
 
 </head>
+
 <body>
-    <div class="container">
+    <div class="container" [ngClass]="{'shadow-box':registFrom.touched}">
         <h2>Student Registration Form</h2>
         <form (ngSubmit)="Onsubimt()" #registFrom="ngForm">
             <div class="form-row">
                 <div class="form-group">
                     <label for="firstname">First Name</label>
-                    <input type="text" id="firstname" name="firstname" required>
+                    <input type="text" #firstname="ngModel" name="firstname"   [(ngModel)]="Firstname" required>
+                    <div>
+                        <small *ngIf="firstname.invalid && firstname.touched"> * First Name is a required field</small>
+                    </div>
+
                 </div>
                 <div class="form-group">
                     <label for="lastname">Last Name</label>
-                    <input type="text" id="lastname" name="lastname" required>
+                    <input type="text" #lastname="ngModel" name="lastname"  [(ngModel)]="Lastname" required>
+                    <div>
+                        <small *ngIf="lastname.invalid && lastname.touched"> * Last Name is a required field</small>
+                    </div>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" #email="ngModel" name="email" [(ngModel)]="Email" required email>
+                    <div>
+                        <small *ngIf="email.invalid && email.touched"> * Email is a required field</small>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" required>
+                    <input type="tel" id="phone" name="phone" ngModel>
                 </div>
             </div>
+
             <div class="form-row">
                 <div class="form-group">
                     <label for="dob">Date of Birth</label>
-                    <input type="date" id="dob" name="dob" required>
+                    <input type="date" name="dob" [(ngModel)]="DateofBirth" required #dob="ngModel">
                 </div>
                 <div class="form-group">
                     <label for="gender">Gender</label>
-                    <select id="gender" name="gender" required>
+                    <select id="gender" name="gender" ngModel>
                         <option value="">Select Gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
@@ -46,37 +59,74 @@
                 </div>
             </div>
             <div class="form-row">
+              <div class="form-group">
+                  <label for="username">User Name</label>
+                  <input type="text" #email="ngModel" name="username" ngModel  required  #uname="ngModel">
+                  <div>
+                      <small *ngIf="uname.invalid && uname.touched"> * User Name is a required field</small>
+                  </div>
+                  <br>
+                  <button (click)="GenerateUserName()" type="button"
+                  [disabled]="firstname.invalid || lastname.invalid || dob.invalid"
+                   class="create-user">Create a User</button>
+              </div>
+
+
+          </div>
+            <div class="form-row">
                 <div class="form-group">
                     <label for="course">Course</label>
-                    <input type="text" id="course" name="course" required>
+                    <input type="text" id="course" name="course" ngModel>
                 </div>
-                <div class="form-group">
-                    <label for="address">Address</label>
-                    <textarea id="address" name="address" required></textarea>
+            </div>
+            <div class="address" ngModelGroup="address" #addr="ngModelGroup">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="text">No</label>
+                        <input type="text" name="no" ngModel required>
+                    </div>
+                    <div class="form-group">
+                        <label for="street">Street</label>
+                        <input type="text" name="street" ngModel required>
+                    </div>
                 </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="township">Township</label>
+                        <input type="text" name="township" ngModel>
+                    </div>
+                    <div class="form-group">
+                        <label for="region">Region</label>
+                        <input type="text" name="region" ngModel>
+                    </div>
+                </div>
+
+                <small *ngIf="addr.invalid && addr.touched">* some of the address fields does not contain a vaild value</small>
+
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label>Hobbies</label>
                     <div class="checkbox-group">
-                        <label><input type="checkbox" name="hobbies" value="sports"> Sports</label>
-                        <label><input type="checkbox" name="hobbies" value="reading"> Reading</label>
-                        <label><input type="checkbox" name="hobbies" value="music"> Music</label>
+                        <label><input type="checkbox" name="sports" ngModel value="sports"> Sports</label>
+                        <label><input type="checkbox" name="reading" ngModel value="reading"> Reading</label>
+                        <label><input type="checkbox" name="music" ngModel value="music"> Music</label>
                     </div>
                 </div>
                 <div class="form-group">
                     <label>Preferred Contact Method</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="contact_method" value="email" required> Email</label>
-                        <label><input type="radio" name="contact_method" value="phone" required> Phone</label>
-                        <label><input type="radio" name="contact_method" value="mail" required> Mail</label>
+                    <div class="radio-group" *ngFor="let method of contactMethod">
+                        <label><input type="radio" [id]="method.id" name="contact_method" ngModel
+                                [value]="method.value"> {{method.display}}</label>
+
                     </div>
                 </div>
             </div>
             <div class="form-group">
-                <button type="submit">Register</button>
+                <button type="submit" [disabled]="!registFrom.valid">Register</button>
             </div>
         </form>
     </div>
 </body>
+
 </html>
